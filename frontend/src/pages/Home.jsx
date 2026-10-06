@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Navbar from "../components/common/Navbar";
 import Footer from "../components/common/Footer";
 
@@ -27,14 +28,14 @@ function Home() {
             </p>
 
             <div className="hero-actions">
-              <button className="primary-btn">
+              <button className="primary-btn"><Link to="/login" className="primary-btn">
                 Find Your Next Job
-                <span>→</span>
+                <span>→</span></Link>
               </button>
 
-              <button className="secondary-btn">
+              <button className="secondary-btn"><Link to="/login" className="secondary-btn">
                 I'm an Employer
-              </button>
+              </Link></button>
             </div>
 
             <div className="hero-trust">
@@ -137,7 +138,9 @@ function Home() {
               </div>
             </div>
 
-            <button className="search-btn">Search Jobs</button>
+            <button className="search-btn"><Link to="/login" className="search-btn">
+              Search Jobs
+            </Link></button>
           </div>
         </div>
       </section>
@@ -168,7 +171,7 @@ function Home() {
       </section>
 
       {/* FEATURES */}
-      <section className="features-section">
+      <section className="features-section" id="features">
         <div className="section-container">
           <div className="section-heading">
             <span>WHY JRP?</span>
@@ -211,7 +214,7 @@ function Home() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section className="how-section">
+     <section className="how-section" id="how-it-works">
         <div className="section-container">
           <div className="how-content">
             <div className="section-heading left-heading">
@@ -340,10 +343,10 @@ function Home() {
             </p>
           </div>
 
-          <button className="cta-btn">
+          <Link to="/login" className="cta-btn">
             Explore Jobs
-            <span>→</span>
-          </button>
+            <span>→</span></Link>
+          
         </div>
       </section>
 

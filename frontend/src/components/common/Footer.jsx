@@ -1,13 +1,15 @@
+import { Link } from "react-router-dom";
+
 function Footer() {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-main">
           <div className="footer-brand">
-            <a href="#" className="brand footer-logo">
+            <Link to="/" className="brand footer-logo">
               <div className="brand-mark">J</div>
               <span>JRP</span>
-            </a>
+            </Link>
 
             <p>
               Connecting job seekers with opportunities and helping employers
@@ -18,23 +20,25 @@ function Footer() {
           <div className="footer-links">
             <div className="footer-column">
               <h4>Platform</h4>
-              <a href="#jobs">Find Jobs</a>
-              <a href="#">For Employers</a>
-              <a href="#">How It Works</a>
+              <Link to="/jobs">Find Jobs</Link>
+              <Link to="/login">For Employers</Link>
+              <a href="#how-it-works">How It Works</a>
             </div>
 
-            <div className="footer-column">
-              <h4>Company</h4>
-              <a href="#">About Us</a>
-              <a href="#">Contact</a>
-              <a href="#">Careers</a>
-            </div>
+           <div className="footer-column">
+  <h4>Company</h4>
+  <span>About Us</span>
+  <span>Contact</span>
+  <span>Careers</span>
+</div>
 
-            <div className="footer-column">
-              <h4>Legal</h4>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms of Service</a>
-            </div>
+<div className="footer-column">
+  <h4>Legal</h4>
+  <span>Privacy Policy</span>
+  <span>Terms of Service</span>
+</div>
+
+
           </div>
         </div>
 
@@ -52,3 +56,4 @@ function Footer() {
 }
 
 export default Footer;
+

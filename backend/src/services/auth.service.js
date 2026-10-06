@@ -2,7 +2,17 @@ import User from "../models/User.js";
 import { generateToken } from "../utils/generateToken.js";
 
 export const registerUserService = async (userData) => {
-  const { name, email, password, role, companyName } = userData;
+  const {
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    companyName,
+    location,
+    experienceLevel,
+    desiredRole,
+  } = userData;
 
   const normalizedEmail = email?.trim().toLowerCase();
 
@@ -30,12 +40,23 @@ export const registerUserService = async (userData) => {
     throw error;
   }
 
+  if (userRole === "employer" && !companyName?.trim()) {
+    const error = new Error("Company name is required for employer accounts");
+    error.statusCode = 400;
+    throw error;
+  }
+
   const user = await User.create({
-    name,
+    firstName: firstName?.trim(),
+    lastName: lastName?.trim(),
     email: normalizedEmail,
     password,
     role: userRole,
-    companyName: userRole === "employer" ? companyName : undefined,
+    companyName:
+      userRole === "employer" ? companyName.trim() : undefined,
+    location: location?.trim() || "",
+    experienceLevel: experienceLevel || "",
+    desiredRole: desiredRole?.trim() || "",
   });
 
   const token = generateToken(user._id, user.role);
@@ -43,12 +64,16 @@ export const registerUserService = async (userData) => {
   return {
     user: {
       id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
       ...(user.role === "employer" && {
         companyName: user.companyName,
       }),
+      location: user.location,
+      experienceLevel: user.experienceLevel,
+      desiredRole: user.desiredRole,
     },
     token,
   };
@@ -80,12 +105,16 @@ export const loginUserService = async (email, password) => {
   return {
     user: {
       id: user._id,
-      name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       email: user.email,
       role: user.role,
       ...(user.role === "employer" && {
         companyName: user.companyName,
       }),
+      location: user.location,
+      experienceLevel: user.experienceLevel,
+      desiredRole: user.desiredRole,
     },
     token,
   };
@@ -102,8 +131,19 @@ export const getCurrentUserService = async (userId) => {
 
   return {
     id: user._id,
-    name: user.name,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     role: user.role,
+    ...(user.role === "employer" && {
+      companyName: user.companyName,
+    }),
+    phone: user.phone,
+    location: user.location,
+    experienceLevel: user.experienceLevel,
+    desiredRole: user.desiredRole,
+    profilePicture: user.profilePicture,
+    resume: user.resume,
   };
 };
+
