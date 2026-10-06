@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+
 import api from "../../services/api";
+import { AuthContext } from "../../context/AuthContext";
 
 const Profile = () => {
+  const { setUser } = useContext(AuthContext);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -23,6 +27,9 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
+        setLoading(true);
+        setError("");
+
         const response = await api.get("/users/profile");
         const profile = response.data.data;
 
@@ -37,6 +44,11 @@ const Profile = () => {
           profilePicture: profile.profilePicture || "",
           resume: profile.resume || "",
         });
+
+        setUser((previous) => ({
+          ...previous,
+          ...profile,
+        }));
       } catch (err) {
         setError(
           err.response?.data?.message || "Failed to load your profile.",
@@ -47,7 +59,7 @@ const Profile = () => {
     };
 
     fetchProfile();
-  }, []);
+  }, [setUser]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -80,6 +92,11 @@ const Profile = () => {
       const updatedProfile = response.data.data;
 
       setFormData((previous) => ({
+        ...previous,
+        resume: updatedProfile.resume || "",
+      }));
+
+      setUser((previous) => ({
         ...previous,
         resume: updatedProfile.resume || "",
       }));
@@ -125,6 +142,11 @@ const Profile = () => {
         desiredRole: updatedProfile.desiredRole || "",
         profilePicture: updatedProfile.profilePicture || "",
         resume: updatedProfile.resume || previous.resume,
+      }));
+
+      setUser((previous) => ({
+        ...previous,
+        ...updatedProfile,
       }));
 
       setMessage("Profile updated successfully.");
@@ -328,5 +350,3 @@ const Profile = () => {
 };
 
 export default Profile;
-
-
