@@ -6,11 +6,12 @@ import { AuthContext } from "../../context/AuthContext";
 function ApplyJob() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user, setUser } = useContext(AuthContext);
 
   const [job, setJob] = useState(null);
   const [coverLetter, setCoverLetter] = useState("");
   const [loading, setLoading] = useState(true);
+  const [uploadingResume, setUploadingResume] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -25,8 +26,7 @@ function ApplyJob() {
         setJob(response.data.data);
       } catch (err) {
         setError(
-          err.response?.data?.message ||
-            "Unable to load this job.",
+          err.response?.data?.message || "Unable to load this job.",
         );
       } finally {
         setLoading(false);
@@ -35,6 +35,49 @@ function ApplyJob() {
 
     fetchJob();
   }, [id]);
+
+  const handleResumeUpload = async (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    setUploadingResume(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      const uploadData = new FormData();
+      uploadData.append("resume", file);
+
+      const response = await api.post(
+        "/users/profile/resume",
+        uploadData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      const updatedProfile = response.data.data;
+
+      setUser((previous) => ({
+        ...previous,
+        ...updatedProfile,
+        resume: updatedProfile.resume || "",
+      }));
+
+      setSuccess("Resume uploaded successfully.");
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Failed to upload your resume.",
+      );
+    } finally {
+      setUploadingResume(false);
+      event.target.value = "";
+    }
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -45,9 +88,7 @@ function ApplyJob() {
     }
 
     if (!user?.resume) {
-      setError(
-        "Please upload a resume to your profile before applying.",
-      );
+      setError("Please upload a resume before applying.");
       return;
     }
 
@@ -93,6 +134,7 @@ function ApplyJob() {
         <div className="jobs-empty">
           <h3>Unable to load application</h3>
           <p>{error}</p>
+
           <Link to="/jobs" className="view-job-btn">
             Back to Jobs
           </Link>
@@ -134,6 +176,7 @@ function ApplyJob() {
           <form onSubmit={handleSubmit}>
             <div className="form-group">
               <label>Full name</label>
+
               <input
                 type="text"
                 value={
@@ -149,6 +192,7 @@ function ApplyJob() {
 
             <div className="form-group">
               <label>Email</label>
+
               <input
                 type="email"
                 value={user?.email || ""}
@@ -163,6 +207,7 @@ function ApplyJob() {
                 <div className="application-resume">
                   <div className="application-resume-info">
                     <strong>{resumeName}</strong>
+
                     <span>
                       This resume will be submitted with your
                       application.
@@ -182,25 +227,38 @@ function ApplyJob() {
                 <div className="application-resume application-resume-empty">
                   <div className="application-resume-info">
                     <strong>No resume uploaded</strong>
+
                     <span>
-                      Upload a resume from your profile before
-                      applying.
+                      Upload your resume here before submitting
+                      your application.
                     </span>
                   </div>
 
-                  <Link
-                    to="/profile"
-                    state={{ returnTo: `/jobs/${id}/apply` }}
+                  <label
+                    htmlFor="application-resume-upload"
                     className="application-resume-link"
                   >
-                    Go to profile
-                  </Link>
+                    {uploadingResume
+                      ? "Uploading..."
+                      : "Upload Resume"}
+                  </label>
+
+                  <input
+                    id="application-resume-upload"
+                    type="file"
+                    accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    onChange={handleResumeUpload}
+                    disabled={uploadingResume}
+                    style={{ display: "none" }}
+                  />
                 </div>
               )}
             </div>
 
             <div className="form-group">
-              <label htmlFor="coverLetter">Cover letter</label>
+              <label htmlFor="coverLetter">
+                Cover letter
+              </label>
 
               <textarea
                 id="coverLetter"
@@ -229,7 +287,7 @@ function ApplyJob() {
             <button
               type="submit"
               className="apply-submit-btn"
-              disabled={submitting || !user?.resume}
+              disabled={submitting || uploadingResume || !user?.resume}
             >
               {submitting
                 ? "Submitting..."
