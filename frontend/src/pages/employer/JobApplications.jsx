@@ -153,7 +153,7 @@ const JobApplications = () => {
               const candidate = application.candidate || {};
 
               const resumeUrl = application.resume
-                ? `http://localhost:7000${application.resume}`
+                ? `${import.meta.env.VITE_API_URL?.replace(/\/api$/, "")}${application.resume}`
                 : "";
 
               const resumeName = application.resume

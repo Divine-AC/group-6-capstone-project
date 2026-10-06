@@ -109,7 +109,7 @@ function ApplyJob() {
     : "";
 
   const resumeUrl = user?.resume
-    ? `http://localhost:7000${user.resume}`
+    ? `${import.meta.env.VITE_API_URL?.replace(/\/api$/, "")}${user.resume}`
     : "";
 
   return (

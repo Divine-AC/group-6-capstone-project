@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "node --env-file=.env src/server.js",
+    "start": "node src/server.js",
     "dev": "nodemon --env-file=.env src/server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -25,3 +25,4 @@
     "nodemon": "^3.1.14"
   }
 }
+

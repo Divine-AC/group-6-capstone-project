@@ -152,7 +152,7 @@ const Profile = () => {
     : "";
 
   const resumeUrl = formData.resume
-    ? `http://localhost:7000${formData.resume}`
+    ? `${import.meta.env.VITE_API_URL?.replace(/\/api$/, "")}${formData.resume}`
     : "";
 
   return (
@@ -328,3 +328,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
