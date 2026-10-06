@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import api from "../../services/api";
-import { useContext } from "react";
 import { AuthContext } from "../../context/AuthContext";
 
 function ApplyJob() {
@@ -122,9 +121,7 @@ function ApplyJob() {
         <section className="apply-job-card">
           <div className="apply-job-card-heading">
             <span className="section-eyebrow">APPLICATION</span>
-
             <h1>Apply for {job.title}</h1>
-
             <p>{companyName}</p>
           </div>
 
@@ -193,6 +190,7 @@ function ApplyJob() {
 
                   <Link
                     to="/profile"
+                    state={{ returnTo: `/jobs/${id}/apply` }}
                     className="application-resume-link"
                   >
                     Go to profile

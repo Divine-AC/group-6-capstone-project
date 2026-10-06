@@ -1,10 +1,13 @@
 import { useContext, useEffect, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import api from "../../services/api";
 import { AuthContext } from "../../context/AuthContext";
 
 const Profile = () => {
   const { setUser } = useContext(AuthContext);
+  const location = useLocation();
+const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     firstName: "",
@@ -102,6 +105,12 @@ const Profile = () => {
       }));
 
       setMessage("Resume uploaded successfully.");
+
+if (location.state?.returnTo) {
+  setTimeout(() => {
+    navigate(location.state.returnTo, { replace: true });
+  }, 500);
+}
     } catch (err) {
       setError(
         err.response?.data?.message || "Failed to upload your resume.",
