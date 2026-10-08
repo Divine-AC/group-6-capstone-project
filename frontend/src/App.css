@@ -3883,3 +3883,73 @@
   }
 }
 
+/* MOBILE NAVIGATION */
+
+.mobile-nav {
+  display: none;
+}
+
+.mobile-menu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .desktop-nav,
+  .nav-actions > .login-btn,
+  .nav-actions > .signup-btn {
+    display: none;
+  }
+
+  .mobile-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 1rem 1.25rem 1.25rem;
+    border-top: 1px solid #e5e7eb;
+    background: #ffffff;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  }
+
+  .mobile-nav a,
+  .mobile-logout {
+    width: 100%;
+    padding: 0.85rem 0.75rem;
+    border-radius: 8px;
+    text-align: left;
+    text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: #374151;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+  }
+
+  .mobile-nav a:hover,
+  .mobile-logout:hover {
+    background: #f3f4f6;
+  }
+
+  .mobile-signup {
+    background: #06a2c2 !important;
+    color: #ffffff !important;
+    text-align: center !important;
+    margin-top: 0.25rem;
+  }
+
+  .mobile-logout {
+    color: #dc2626;
+  }
+}
